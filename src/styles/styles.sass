@@ -1,0 +1,61 @@
+@import node_modules/muicss/lib/sass/mui
+
+html, body
+  margin: 0
+  padding: 0
+
+.mui-appbar
+  position: absolute
+  top: 0
+  left: 0
+  right: 0 
+  background-color: mui-color('light-green', '900')
+
+  table
+    width: 100%
+
+  a
+    color: white
+
+.app-brand
+  font-size: 20px
+
+  &:hover,
+  &:active,
+  &:focus
+    text-decoration: none
+
+.content
+  position: absolute
+  left: 0
+  right: 0
+  bottom: 60px
+  padding: 10px
+
+  .mui-container-fluid,
+  .bar,
+  .bar>div,
+  #editor,
+  iframe
+    height: 100%
+
+.footer
+  position: absolute
+  bottom: 0
+  left: 0
+  right: 0
+  height: 60px
+  background-color: mui-color('grey', '200')
+  border-top: 1px solid mui-color('grey', '300')
+
+#editor
+  font-size: 16px
+
+iframe
+  width: 100%
+
+#editor, iframe
+  overflow: auto
+
+ul
+  margin: 0
