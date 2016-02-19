@@ -1,0 +1,108 @@
+@import node_modules/muicss/lib/sass/mui
+
+html, body
+  margin: 0
+  padding: 0
+
+.mui-appbar
+  position: absolute
+  top: 0
+  left: 0
+  right: 0 
+  background-color: mui-color('light-green', '900')
+
+  table
+    width: 100%
+
+  a
+    color: white
+
+.app-brand
+  font-size: 20px
+
+  &:hover,
+  &:active,
+  &:focus
+    text-decoration: none
+
+.content
+  position: absolute
+  left: 0
+  right: 0
+  bottom: 60px
+  padding: 10px
+
+  .mui-container-fluid,
+  .bar,
+  .bar>div,
+  iframe
+    height: 100%
+
+.bar
+  position: relative
+
+.bar:after
+  content: " "
+  display: table
+  clear: both
+
+.footer
+  position: absolute
+  bottom: 0
+  left: 0
+  right: 0
+  height: 60px
+  background-color: mui-color('grey', '200')
+  border-top: 1px solid mui-color('grey', '300')
+
+iframe
+  width: 100%
+
+#editorHtml, #editorCss iframe
+  overflow: auto
+
+#editorHtml, #editorCss
+  height: 50%
+
+#editorHtml
+  border-bottom: 1px solid mui-color('grey', '400')
+
+ul
+  margin: 0
+
+.horizontal-divider
+  position: absolute
+  top: 50%
+  left: 0
+  right: 0
+  margin-top: -4px
+  height: 8px
+  cursor: ns-resize
+
+.vertical-divider
+  cursor: ew-resize
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 50%
+  width: 8px
+  margin-left: -4px
+
+.editors, .results
+  width: 50%
+  float: left
+
+.editors
+  position: relative
+
+.results
+  position: relative
+  border-left: 1px solid mui-color('grey', '400')
+
+  .overlayer
+    position: absolute
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+

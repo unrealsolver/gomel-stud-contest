@@ -1,15 +1,34 @@
 doctype html
 html
   head
-    style(type="text/css").
-      #editor {
-        position: relative;
-        height: 300px;
-        width: 600px
-      }
+    title Editor
+    link(rel="stylesheet", href="styles/styles.css")
   body
-    div
-      #editor
+    .mui-appbar.mui--z1
+      .mui-container-fluid
+        table
+          tbody
+            tr.mui--appbar-height
+              td
+                a.app-brand(href="") Editor
+              td.mui--text-right
+                ul.mui-list--inline.mui--text-body2
+                  li
+                    a(href="#" class="js-run") Run
+    .content.mui--appbar-top
+      .mui-container-fluid
+        .bar
+          .editors
+            #editorHtml
+            .horizontal-divider
+            #editorCss
+          .vertical-divider
+          .results
+            iframe(
+              frameborder="0",
+              class="js-result",
+              sandbox="allow-forms allow-same-origin")
+    .footer
     script(src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js")
-    script.
-      var editor = ace.edit('editor')
+    script(src='scripts/lib/jquery.js')
+    script(src='scripts/main.js')
