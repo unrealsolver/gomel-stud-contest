@@ -1,0 +1,32 @@
+extends ./layout/layout
+
+block title
+  title Layout step results
+
+block content
+  .total-results
+    table
+      thead
+        tr
+          th Participant
+          th(data-col=1) Task 1
+            button.js-sort Sort
+          th(data-col=2) Task 2
+            button.js-sort Sort
+          th(data-col=3) Total
+            button.js-sort Sort
+      tbody
+        each user in users
+          tr
+            td #{user.firstName} #{user.lastName}
+            each task in user.tasks
+              if task.task !== null
+                td
+                  span.sort-item #{task.time}
+                  span /
+                  a(href="/saveFile/#{user.id}_#{user.username}/task_#{task.task}") file
+            td
+              span.sort-item= user.totalTime
+
+block scripts
+  script(src="scripts/main.js")

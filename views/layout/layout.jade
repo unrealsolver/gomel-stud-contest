@@ -1,0 +1,53 @@
+doctype html
+html
+  head
+    block title
+
+    link(rel="stylesheet", href="styles/styles.css")
+    block link
+  body
+    .wrapper
+      .header
+        block header
+          a.brand(href="/") Contest
+          if user
+            case user.role.name
+              when "admin"
+                ul
+                  li
+                    a(href="/total") Results
+                  li
+                    a(href="/layoutStepResults") Step 1
+                  li
+                    a(href="/quizResults") Step 2
+                  li
+                    a(href="/users") Users
+                  li
+                    a(href="/quizBoard") CSS quiz board
+              when "student"
+                if !passed
+                  ul
+                    li
+                      a(href="/editor") Start
+        ul.right
+          li
+            if user
+              a(href="/logout") Logout
+            else
+              a(href="/login") Login
+      if editorPage
+        .content.editor-page
+          .container
+            block content
+      else
+        .content
+          .container
+            block content
+    .footer Developed by Mikhail Hatsilau (mikhail_hatsilau@epam.com)
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js")
+    script(src="scripts/lib/jquery.js")
+    script(src="scripts/lib/lodash/lodash.js")
+    script(src="/socket.io/socket.io.js")
+    script.
+      var socketIo = io()
+    block scripts

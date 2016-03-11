@@ -27,6 +27,16 @@ gulp.task 'server:start', ->
 gulp.task 'copy-libs', ->
   gulp.src './node_modules/jquery/dist/jquery.js'
     .pipe gulp.dest DEST + 'scripts/lib/'
+  gulp.src './node_modules/lodash/**/*'
+    .pipe gulp.dest DEST + 'scripts/lib/lodash/'
+
+gulp.task 'copy-quiz', ->
+  gulp.src './src/cssTests/**/*'
+    .pipe gulp.dest DEST + '/cssTests/'
+
+gulp.task 'copy-tasks', ->
+  gulp.src './src/tasks/*'
+    .pipe gulp.dest DEST + '/tasks/'
 
 gulp.task 'watch', ->
   gulp.watch './src/**/*.jade', ['jade']
@@ -34,4 +44,4 @@ gulp.task 'watch', ->
   gulp.watch './src/**/*.coffee', ['coffee']
   gulp.watch './server.coffee', server.restart
 
-gulp.task 'default', ['jade', 'sass', 'coffee', 'copy-libs', 'server:start', 'watch']
+gulp.task 'default', ['jade', 'sass', 'coffee', 'copy-libs', 'copy-quiz', 'copy-tasks', 'server:start', 'watch']

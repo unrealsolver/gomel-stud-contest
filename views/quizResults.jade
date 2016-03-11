@@ -1,0 +1,49 @@
+extends ./layout/layout
+
+block title
+  title CSS quiz results
+
+block content
+  .total-results
+    table.quiz-results-time
+      thead
+        tr
+          th Participant
+          th(data-col=1) Task 1
+            button.js-sort Sort
+          th(data-col=2) Task 2
+            button.js-sort Sort
+          th(data-col=3) Task 3
+            button.js-sort Sort
+          th(data-col=4) Total
+            button.js-sort Sort
+      tbody
+        each user in users
+          tr
+            td= user.firstName + ' ' + user.lastName
+            each task in user.tasks
+              td
+                span.sort-item= task.time
+            td
+              span.sort-item= user.totalTime
+
+    table.quiz-results-length
+      thead
+        tr
+          th Participant
+          th(data-col=1) Task 1
+            button.js-sort Sort
+          th(data-col=2) Task 2
+            button.js-sort Sort
+          th(data-col=3) Task 3
+            button.js-sort Sort
+      tbody
+        each user in users
+          tr
+            td= user.firstName + ' ' + user.lastName
+            each task in user.tasks
+              td
+                span.sort-item= task.selectorLength
+
+block scripts
+  script(src="scripts/main.js")

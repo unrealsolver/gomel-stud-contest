@@ -1,0 +1,19 @@
+form.add-user(action="/addUser", method="POST")
+  div
+    label(for="username") Username:
+    input#username(type="text", name="username")
+  div
+    label(for="password") Password:
+    input#password(type="password", name="password")
+  div
+    label(for="firstName") First name:
+    input#firstName(type="text", name="firstName")
+  div
+    label(for="lastName") Last name:
+    input#lastName(type="text", name="lastName")
+  div
+    label(for="roles") Role:
+    select#roles(name="role")
+  div.popup-actions
+    input.add-user-submit(type="submit", value="Add")
+    input.close-popup-btn(type="button", value="Close") 
