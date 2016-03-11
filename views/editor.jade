@@ -1,0 +1,33 @@
+extends ./layout/layout.jade
+
+block title
+  title Editor
+
+block header
+  a.brand(href="/") HTML/CSS Editor
+  ul
+    li
+      a(href="#" class="js-show-popup") Show task
+    li
+      a(href="#" class="js-run") Run
+
+block content
+  .bar.clearfix
+    .editors
+      #editorHtml
+      .horizontal-divider
+      #editorCss
+    .vertical-divider
+    .results
+      iframe(
+        frameborder="0",
+        class="js-result",
+        sandbox="allow-forms allow-same-origin allow-scripts")
+    button.round-btn.next-task Next
+
+  .popup-overlay
+    .popup.task-popup
+
+block scripts
+  script(src='scripts/editor.js')
+  script(src='scripts/popup.js')

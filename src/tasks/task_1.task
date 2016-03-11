@@ -1,0 +1,11 @@
+<div>
+  BlaBla
+</div>
+*
+div {
+  height: 50px;
+  background: green;
+  text-align: center;
+}
+*
+Align text vertically

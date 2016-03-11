@@ -1,59 +1,92 @@
-@import node_modules/muicss/lib/sass/mui
+$main-background: #3f51b5
+$header-height: 60px
+$font: Arial
+$btns-color: #e91e63
+$list-divider-color: #e0e0e0
 
 html, body
   margin: 0
   padding: 0
+  font-family: $font
+  height: 100%
 
-.mui-appbar
-  position: absolute
-  top: 0
-  left: 0
-  right: 0 
-  background-color: mui-color('light-green', '900')
+.wrapper
+  background-color: #e8eaf6
+  min-height: 100%
+  padding-bottom: 60px
+  box-sizing: border-box
 
-  table
-    width: 100%
+.header
+  height: $header-height
+  line-height: 60px
+  box-shadow: 0 1px 10px black
+  background-color: $main-background
 
-  a
+  .brand
+    font-size: 18px
     color: white
-
-.app-brand
-  font-size: 20px
-
-  &:hover,
-  &:active,
-  &:focus
+    display: inline-block
+    height: 100%
+    line-height: $header-height
+    padding: 0 20px
+    vertical-align: middle
     text-decoration: none
+  
+  ul
+    height: 100%
+    line-height: $header-height
+    list-style: none
+    display: inline-block
+    vertical-align: middle
+    padding: 0
+    
+    li
+      float: left
+
+      a
+        text-decoration: none
+        color: white
+        padding: 0 20px
+        text-align: center
 
 .content
+  padding: 20px
+
+.content.editor-page
   position: absolute
   left: 0
   right: 0
+  top: $header-height
   bottom: 60px
-  padding: 10px
 
-  .mui-container-fluid,
   .bar,
   .bar>div,
   iframe
     height: 100%
 
+.container
+  background-color: white
+  box-shadow: 0 1px 5px black
+  height: 100%
+  padding: 10px
+  box-sizing: border-box
+
 .bar
   position: relative
 
-.bar:after
+.clearfix:after
   content: " "
   display: table
   clear: both
 
 .footer
-  position: absolute
-  bottom: 0
-  left: 0
-  right: 0
   height: 60px
-  background-color: mui-color('grey', '200')
-  border-top: 1px solid mui-color('grey', '300')
+  background-color: #e0e0e0
+  border-top: 1px solid #bdbdbd
+  line-height: 60px
+  padding-left: 20px
+  font-size: 12px
+  margin-top: -61px
 
 iframe
   width: 100%
@@ -65,7 +98,8 @@ iframe
   height: 50%
 
 #editorHtml
-  border-bottom: 1px solid mui-color('grey', '400')
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3)
+  box-sizing: border-box
 
 ul
   margin: 0
@@ -78,6 +112,7 @@ ul
   margin-top: -4px
   height: 8px
   cursor: ns-resize
+  z-index: 2
 
 .vertical-divider
   cursor: ew-resize
@@ -87,6 +122,7 @@ ul
   left: 50%
   width: 8px
   margin-left: -4px
+  z-index: 2
 
 .editors, .results
   width: 50%
@@ -97,7 +133,8 @@ ul
 
 .results
   position: relative
-  border-left: 1px solid mui-color('grey', '400')
+  border-left: 1px solid rgba(0, 0, 0, 0.3)
+  box-sizing: border-box
 
   .overlayer
     position: absolute
@@ -105,4 +142,120 @@ ul
     left: 0
     bottom: 0
     right: 0
+
+.right
+  float: right
+
+.next-task[disabled]
+  opacity: 0.5
+  cursor: default
+
+//****Popup****
+.popup-overlay
+  visibility: hidden
+  position: fixed
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  background-color: rgba(0, 0, 0, 0.6)
+  text-align: center
+  z-index: 4
+  transition: visibility 0.5s
+
+  &:after
+    content: " "
+    height: 100%
+    display: inline-block
+    vertical-align: middle
+
+.popup
+  background-color: white
+  display: inline-block
+  vertical-align: middle
+  opacity: 0
+  transition: opacity 1s
+
+.task-popup
+  height: 200px
+  width: 400px
+
+//****End popup****
+
+.round-btn
+  position: absolute
+  bottom: 10px
+  right: 10px
+  background-color: $btns-color
+  color: white
+  box-shadow: 0 1px 8px black
+  border: none
+  width: 50px
+  height: 50px
+  line-height: 50px
+  text-align: center
+  border-radius: 50%
+  cursor: pointer
+
+//****Users page****
+.student, .list-header
+  width: 100%
+  border-bottom: 1px solid $list-divider-color
+  padding: 10px
+  box-sizing: border-box
+
+  &:last-child
+    border-bottom: none
+
+  >div
+    float: left
+
+  .username
+    width: 30%
+  .first-name
+    width: 20%
+  .last-name
+    width: 20%
+  .role
+    width: 20%
+  .remove
+    width: 10%
+
+.list-header
+  font-weight: bold
+
+//***Quiz board****
+.participants-list
+  width: 100%
+  border-collapse: collapse
+
+  tr
+    transition: background-color 1s
+
+//***end quiz board****
+
+//***Common results page***
+.results-of-participants
+  .results-header
+    >div
+      font-weight: bold
+  >div
+    >div
+      float: left
+
+    .name
+      width: 40%
+
+    .step1-results
+      width: 25%
+
+    .step2-results
+      width: 25%
+
+    .sum
+      width: 10%
+
+  .participant
+    .step1-results, .step2-results
+      cursor: pointer
 

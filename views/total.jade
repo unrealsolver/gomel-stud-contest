@@ -1,0 +1,23 @@
+extends ./layout/layout
+
+block title
+  title Results
+
+block content
+  .results-of-participants
+    .results-header.clearfix
+      .name Participant's name
+      .step1-results Mark of step 1
+      .step2-results Mark of step 2 (CSS quiz)
+      .sum Total
+    each result in results
+      .participant.clearfix(data-id="#{result.id}")
+        .name= result.firstName + ' ' + result.lastName
+        .js-step-results.step1-results(data-step=1)
+          span= result.step1 || 0
+        .js-step-results.step2-results(data-step=2)
+          span= result.step2 || 0
+        .sum= result.total || 0
+
+block scripts
+  script(src="scripts/main.js")

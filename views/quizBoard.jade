@@ -1,0 +1,18 @@
+extends ./layout/layout
+
+block title
+  title Quiz board
+
+block content
+  button.start-quiz-btn Start quiz
+  table.participants-list
+    thead
+      tr
+        th Participant
+        th Task 1
+        th Task 2
+        th Task 3
+    tbody
+
+block scripts
+  script(src="scripts/main.js")

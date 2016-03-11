@@ -1,0 +1,3 @@
+*
+*
+Create your own form to sign in. The form has to contain two fields: firstName, lastName. Submit url is "/pass"

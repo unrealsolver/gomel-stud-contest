@@ -1,90 +1,76 @@
 koa = require 'koa'
 serve = require 'koa-static'
-router = require('koa-router')()
-koaBody = require('koa-body')()
+koaBody = do require 'koa-body'
 json = require 'koa-json'
-session = require 'koa-session'
 validate = require 'koa-validate'
-fs = require 'fs'
-mkdirp = require 'mkdirp'
+path = require 'path'
+config = require 'config'
+router = require './routes'
+views = require 'koa-views'
+http = require 'http'
+socket = require 'socket.io'
+cookie = require 'cookie'
+db = require './database'
+
 app = koa()
+httpServer = http.createServer app.callback()
+io = socket httpServer
 
 app.use json()
-app
-  .use router.routes()
-  .use router.allowedMethods()
-app.keys = ['contest']
-router.use session(app)
+app.use koaBody
 app.use validate()
+app.keys = ['contest']
 
-app.use serve(__dirname + '/dist')
+app.use(views path.join(__dirname, '/views') , {
+  extension: 'jade'
+})
 
-saveFile = (html, css, script, sessionId)->
-  DIR = 'dist/results'
-  fileForSave = "<html>
-    <head>
-      <style type='text/css'>
-        #{css}
-      </style>
-    </head>
-    <body>
-      #{html}
-      <script>
-        #{script}
-      </script>
-    </body>
-  </html>"
+app.use (next) ->
+  try
+    yield next
+  catch error
+    console.log error
+    this.status = error.status || 500
+    yield this.render 'error', {
+      errorStatus: error.status,
+      errorMessage: error.message
+    }
 
-  mkdirp.sync DIR
-  fs.writeFileSync "#{DIR}/#{sessionId}.html", fileForSave
-
-  "/results/#{sessionId}.html"
-
-router.all '/', (next) ->
-  if this.session.isNew then this.session.save()
+app.use (next) ->
+  this.state.user = this.session.user
+  this.state.passed = this.session.passedQuiz
   yield next
 
-router.post '/save', koaBody, (next) ->
-  yield next
-  requestBody = this.request.body
-  html = requestBody.htmlContent
-  css = requestBody.cssContent
-  script = requestBody.scriptContent
+router(app)
 
-  sessionId = this.cookies.get 'koa:sess.sig'
+app.use serve(path.join __dirname, '/dist' )
 
-  if typeof html is 'undefined'
-    html = ''
-  if typeof css is 'undefined'
-    css = ''
-  if typeof script is 'undefined'
-    script = ''
+db.createConnection()
 
-  path = saveFile html, css, script, sessionId
+io.use (socket, next) ->
+  handShakeData = socket.request
+  if handShakeData.headers.cookie && handShakeData.headers.cookie.indexOf('koa:sess') > -1
+    cookieData = cookie.parse(handShakeData.headers.cookie)['koa:sess']
+    parsedUser = JSON.parse(new Buffer(cookieData, 'base64'))
+    handShakeData.user = parsedUser.user
+    next()
+  else
+    next(new Error('Not authorized'))
 
-  this.body = {
-    status: 'ok',
-    filePath: path,
-  }
+io.on 'connection', (socket) ->
+  socket.on 'ready to start', ->
+    socket.join 'ready room'
+    socket.broadcast.emit 'add user', socket.request.user
 
-router.post '/pass', koaBody, (next) ->
-  yield next
-  requestBody = this.request.body
-  this.checkBody('firstName').notEmpty().isAlpha()
-  this.checkBody('lastName').notEmpty().isAlpha()
+  socket.on 'begin', (data, callback) ->
+    io.to 'ready room'
+      .emit 'start quiz'
+    db.clearQuizResults()
+    callback()
 
-  if this.errors
-    this.status = 400
-    this.body = this.errors
-    return
-
-  this.session.user = {
-    firstName: requestBody.firstName,
-    lastName: requestBody.lastName
-  }
-
-  this.body = 'Hello ' + this.session.user.firstName + ' ' + this.session.user.lastName
-
-app.listen 3000
-
-console.log 'Listening port 3000'
+  socket.on 'pass test', (data) ->
+    data.user = socket.request.user
+    socket.broadcast.emit 'test passed', data
+    db.saveQuizResults data, socket.request.user.id
+  
+httpServer.listen config.get('port')

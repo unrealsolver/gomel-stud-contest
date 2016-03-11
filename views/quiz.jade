@@ -1,0 +1,27 @@
+extends ./layout/layout
+
+block title
+  title Quiz
+
+block link
+  link(rel="stylesheet", href="cssTests/css/style.css")
+
+block header
+  a.brand(href="/") CSS Quiz
+
+block content
+  .sm-container
+    .forbidden
+      .title Forbidden selectors
+      .data
+    .time
+      .title Time spent
+      .data 00:00
+  .sm-container
+    .input-wrapper
+      input.selector(type="text")
+  .html-wrapper(style="left: -2000px; top: -300px; transform: rotate(-90deg) scale(2);")
+    table.html-code(cellspacing="0", cellpadding="0")
+
+block scripts
+  script(src="cssTests/script/script.js")

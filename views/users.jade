@@ -1,0 +1,30 @@
+extends ./layout/layout
+
+block title
+  title Users
+
+block content
+  .users-list
+    .actions
+      button.add-new-user.js-show-popup Add
+    .list-header.clearfix
+      .username Username
+      .first-name First name
+      .last-name Last name
+      .role Role
+      .remove Remove
+    each user in users
+      .student.clearfix(data-id="#{user.id}")
+        .username #{user.username}
+        .first-name #{user.firstName}
+        .last-name  #{user.lastName}
+        .role #{user.role.name}
+        .remove
+          button.remove-user Remove
+
+  .popup-overlay
+    .popup.add-user-popup
+      include ./includes/addUserPopup.jade
+block scripts
+  script(src="scripts/main.js")
+  script(src="scripts/popup.js")
