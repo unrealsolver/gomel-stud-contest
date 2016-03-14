@@ -46,5 +46,13 @@ module.exports.getFilePath = (idAndName, fileName) ->
 module.exports.getFileStream = (file) ->
   fs.createReadStream file
 
+module.exports.getCountOfFirstStepTasks = ->
+  DIR = "src/tasks"
+  fs.readdirSync(DIR).length
+
+module.exports.getCountOfQuizTasks = ->
+  DIR = "src/cssTests/tasks"
+  fs.readdirSync(DIR).length
+
 module.exports.encryptPass = (password) ->
   sha1 password

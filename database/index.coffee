@@ -69,26 +69,24 @@ module.exports.firstStepResults = ->
   "WHERE #{USERS_TABLE}.role = (SELECT id FROM #{ROLES_TABLE} WHERE name = 'student');"
   connection.query QUERY
 
-module.exports.commonResults = ->
-  QUERY = "SELECT #{USERS_TABLE}.id, #{USERS_TABLE}.firstName, #{USERS_TABLE}.lastName, " + 
-  "#{RESULTS_TABLE}.step1, #{RESULTS_TABLE}.step2, #{RESULTS_TABLE}.step1 + #{RESULTS_TABLE}.step2 AS total " + 
-  "FROM #{USERS_TABLE} LEFT JOIN #{RESULTS_TABLE} ON #{USERS_TABLE}.id=#{RESULTS_TABLE}.user_id " +
+module.exports.commonResults = (step) ->
+  QUERY = "SELECT #{USERS_TABLE}.id as userId, #{USERS_TABLE}.firstName, #{USERS_TABLE}.lastName, " + 
+  "#{RESULTS_TABLE}.task, #{RESULTS_TABLE}.mark " + 
+  "FROM #{USERS_TABLE} LEFT JOIN #{RESULTS_TABLE} ON #{USERS_TABLE}.id=#{RESULTS_TABLE}.user_id AND #{RESULTS_TABLE}.step = ? " +
   "WHERE #{USERS_TABLE}.role = (SELECT id FROM #{ROLES_TABLE} WHERE name = 'student');"
-  connection.query QUERY
+  connection.query QUERY, [step]
 
-module.exports.getUserResults = (userId) ->
-  QUERY = "SELECT * FROM #{RESULTS_TABLE} WHERE user_id = ?;"
-  connection.query QUERY, [userId]
+module.exports.getUserResults = (userId, step, task) ->
+  QUERY = "SELECT * FROM #{RESULTS_TABLE} WHERE user_id = ? AND step = ? AND task = ?;"
+  connection.query QUERY, [userId, step, task]
 
-module.exports.changeResultOfCurrentUser = (userId, step, value) ->
-  column = "step#{step}"
-  QUERY = "UPDATE #{RESULTS_TABLE} SET #{column} = ? WHERE user_id = ?;"
-  connection.query QUERY, [value, userId]
+module.exports.changeResultOfCurrentUser = (userId, step, task, value) ->
+  QUERY = "UPDATE #{RESULTS_TABLE} SET mark = ? WHERE user_id = ? AND step = ? AND task = ?;"
+  connection.query QUERY, [value, userId, step, task]
 
-module.exports.createResultForUser = (userId, step, value) ->
-  column = "step#{step}"
-  QUERY = "INSERT INTO #{RESULTS_TABLE} (user_id, #{column}) VALUE (?,?);"
-  connection.query QUERY, [userId, value]
+module.exports.createResultForUser = (userId, step, task, value) ->
+  QUERY = "INSERT INTO #{RESULTS_TABLE} (user_id, step, task, mark) VALUE (?,?,?,?);"
+  connection.query QUERY, [userId, step, task, value]
 
 module.exports.clearQuizResults = ->
   QUERY = "DELETE FROM #{QUIZ_TABLE};"
