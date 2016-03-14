@@ -4,46 +4,52 @@ block title
   title CSS quiz results
 
 block content
-  .total-results
-    table.quiz-results-time
-      thead
+  h3 CSS Quiz results (time)
+  table.results-table.quiz-results-time
+    thead
+      tr
+        th Participant
+        - var i = 1
+        while i <= countOfTasks
+          th(data-col="#{i}") Task #{i}
+            button.js-sort Sort
+          - i++
+        th(data-col="#{i}") Total
+          button.js-sort Sort
+    tbody
+      each user in users
         tr
-          th Participant
-          th(data-col=1) Task 1
-            button.js-sort Sort
-          th(data-col=2) Task 2
-            button.js-sort Sort
-          th(data-col=3) Task 3
-            button.js-sort Sort
-          th(data-col=4) Total
-            button.js-sort Sort
-      tbody
-        each user in users
-          tr
-            td= user.firstName + ' ' + user.lastName
-            each task in user.tasks
+          td= user.firstName + ' ' + user.lastName
+          - i = 1
+          while i <= countOfTasks
+            if user.tasksTime[i]
               td
-                span.sort-item= task.time
+                span.sort-item= user.tasksTime[i]
+            else
+              td
+            - i++
+          td
+            span.sort-item= user.totalTime
+
+  h3 CSS Quiz results (Length of selector)
+  table.results-table.quiz-results-length
+    thead
+      tr
+        th Participant
+        - var i = 1
+        while i <= countOfTasks
+          th(data-col="#{i}") Task #{i}
+            button.js-sort Sort
+          - i++
+    tbody
+      each user in users
+        tr
+          td= user.firstName + ' ' + user.lastName
+          - i = 1
+          while i <= countOfTasks
             td
-              span.sort-item= user.totalTime
-
-    table.quiz-results-length
-      thead
-        tr
-          th Participant
-          th(data-col=1) Task 1
-            button.js-sort Sort
-          th(data-col=2) Task 2
-            button.js-sort Sort
-          th(data-col=3) Task 3
-            button.js-sort Sort
-      tbody
-        each user in users
-          tr
-            td= user.firstName + ' ' + user.lastName
-            each task in user.tasks
-              td
-                span.sort-item= task.selectorLength
-
+              if user.tasksSelectorLength[i]
+                span.sort-item= user.tasksSelectorLength[i]
+            - i++
 block scripts
   script(src="scripts/main.js")

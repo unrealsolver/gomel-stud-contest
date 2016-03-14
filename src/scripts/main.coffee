@@ -119,46 +119,54 @@ $('.start-quiz-btn').on 'click', ->
 saveResults = (parent) ->
   editElement = $(parent).find 'input'
   if editElement.length is 0 then return
-  participant = editElement.parents('.participant')
+  participant = editElement.parents('tr')
   textElement = editElement.siblings 'span'
   value = +editElement.val() || 0
   if not (value is +textElement.text())
     userId = participant.data 'id'
-    step = editElement.parent().data 'step'
+    step = editElement.parents('table').data 'step'
+    taskNumber = editElement.parent('td').data 'task'
     $.ajax {
       url: '/saveResults',
       method: 'POST',
       data: {
         userId: userId,
         step: step,
+        task: taskNumber,
         value: value
       }
     }
       .fail ->
         console.log 'Error occured while saving results'
   textElement.text value
-  totalTextElement = participant.find '.sum'
-  step1Mark = +participant.find('.step1-results').text()
-  step2Mark = +participant.find('.step2-results').text()
-  totalTextElement.text(step1Mark + step2Mark)
+  totalTextElement = participant.find('td').find '.sum'
+  elementsWithMark = participant.find('.task-mark')
+  console.log participant
+  totalMark = 0
+  for element in elementsWithMark
+    totalMark += +$(element).text()
+  console.log totalMark
+  totalTextElement.text(totalMark)
   editElement.remove()
   textElement.show()
 
 # Common results. Save results when user clicks outside of the field with mark
-$('.results-of-participants'). on 'click', (event) ->
+$('.total-results'). on 'click', (event) ->
   saveResults this
   
-# Common results. Show input when user clicks on span with mark
-$('.js-step-results').on 'click', (event) ->
+editMarkCallback = (event) ->
   if this is event.target or $(event.target)[0] is $(this).find('span')[0]
-    saveResults $(this).parents '.results-of-participants'
+    saveResults $(this).parents '.total-results'
     textElement = $(this).find('span')
     textElement.hide()
     $(this).append $('<input type="text" />').val textElement.text()
   event.stopPropagation()
 
+# Common results. Show input when user clicks on span with mark
+$('.js-step-results').on 'click', editMarkCallback
+
 # Result sorting
-$('.total-results').find('.js-sort').on 'click', (event) ->
+$('.js-sort').on 'click', (event) ->
   ascendingOrder = (a, b) ->
     sortColumnA = $(a).find('td')[taskNumber]
     sortColumnB = $(b).find('td')[taskNumber]
@@ -182,6 +190,7 @@ $('.total-results').find('.js-sort').on 'click', (event) ->
     $(this).parent().data 'sorted', true
 
   table.find('tbody').empty().append rows
+  $('.js-step-results').on 'click', editMarkCallback
 
 # Parse seconds according to the format (mm:ss)
 parseTime = (time) ->
@@ -194,12 +203,14 @@ parseTime = (time) ->
 # Event from the server. When user is ready to start quiz this function adds
 # user to the list of ready users
 socketIo.on 'add user', (user) ->
-  participantsList = $('.participants-list').find 'tbody'
+  participantsTable = $('.participants-list')
+  participantsList = participantsTable.find 'tbody'
   participant = $('<tr class="participant" data-id=' + user.id + ' />')
   participant.append $('<td />').text(user.firstName + ' ' + user.lastName)
-  participant.append $('<td />')
-  participant.append $('<td />')
-  participant.append $('<td />')
+  i = 1
+  while i <= participantsTable.data 'count'
+    participant.append $('<td />')
+    i++
   participant.appendTo participantsList
 
 # Event from the server. When user passes one test of the quiz this function is called

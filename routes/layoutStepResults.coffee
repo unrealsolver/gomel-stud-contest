@@ -15,19 +15,22 @@ module.exports = (next) ->
       time: row.time
 
     if index is -1
+      tasks = {}
+      tasks[row.task] = row.time
       users.push {
         id: row.id
         username: row.username,
         firstName: row.firstName,
-        lastName: row.lastName
-        tasks: [task],
+        lastName: row.lastName,
+        tasks: if task.task is null then {} else tasks,
         totalTime: row.time
       }
       continue
 
-    users[index].tasks.push task
+    users[index].tasks[row.task] = row.time
     users[index].totalTime += row.time
 
-  console.log users[1].tasks
-
-  yield this.render 'layoutStepResults', { users: users }
+  yield this.render 'layoutStepResults', {
+    users: users,
+    countOfTasks: utils.getCountOfFirstStepTasks()
+  }

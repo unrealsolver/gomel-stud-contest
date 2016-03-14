@@ -4,20 +4,59 @@ block title
   title Results
 
 block content
-  .results-of-participants
-    .results-header.clearfix
-      .name Participant's name
-      .step1-results Mark of step 1
-      .step2-results Mark of step 2 (CSS quiz)
-      .sum Total
-    each result in results
-      .participant.clearfix(data-id="#{result.id}")
-        .name= result.firstName + ' ' + result.lastName
-        .js-step-results.step1-results(data-step=1)
-          span= result.step1 || 0
-        .js-step-results.step2-results(data-step=2)
-          span= result.step2 || 0
-        .sum= result.total || 0
+  h3 First step marks
+  table.results-table.total-results.total-results-first-step(data-step=1)
+    thead
+      tr
+        th Participant
+        - var i = 1
+        while i <= countOfFirstStepTasks
+          th(data-col="#{i}") Task #{i}
+            button.js-sort Sort
+          - i++
+        th(data-col="#{i}") Total
+          button.js-sort Sort
+    tbody
+      each user in firstStepResults
+        tr(data-id="#{user.userId}")
+          td #{user.firstName} #{user.lastName}
+          - i = 1
+          while i <= countOfFirstStepTasks
+            td.task-mark.js-step-results(data-task="#{i}")
+              if user.tasks[i]
+                span.sort-item= user.tasks[i]
+              else
+                span 0
+            - i++
+          td
+            span.sum.sort-item= user.totalMark
+
+  h3 CSS Quiz marks
+  table.results-table.total-results.total-results-quiz-step(data-step=2)
+    thead
+      tr(data-id="#{user.userId}")
+        th Participant
+        - var i = 1
+        while i <= countOfQuizTasks
+          th(data-col="#{i}") Task #{i}
+            button.js-sort Sort
+          - i++
+        th(data-col="#{i}") Total
+          button.js-sort Sort
+    tbody
+      each user in quizStepResults
+        tr(data-id="#{user.userId}")
+          td #{user.firstName} #{user.lastName}
+          - i = 1
+          while i <= countOfQuizTasks
+            td.task-mark.js-step-results(data-task="#{i}")
+              if user.tasks[i]
+                span.sort-item= user.tasks[i]
+              else
+                span 0
+            - i++
+          td
+            span.sum.sort-item= user.totalMark
 
 block scripts
   script(src="scripts/main.js")

@@ -227,35 +227,26 @@ ul
 //***Quiz board****
 .participants-list
   width: 100%
-  border-collapse: collapse
 
   tr
     transition: background-color 1s
 
 //***end quiz board****
 
+.results-table
+  width: 100%
+  border-collapse: collapse
+  table-layout: fixed
+
+  th, td
+    text-align: left
+    border-bottom: 1px solid $list-divider-color
+
 //***Common results page***
-.results-of-participants
-  .results-header
-    >div
-      font-weight: bold
-  >div
-    >div
-      float: left
+.total-results
 
-    .name
-      width: 40%
+  .task-mark
+    cursor: pointer
 
-    .step1-results
-      width: 25%
-
-    .step2-results
-      width: 25%
-
-    .sum
-      width: 10%
-
-  .participant
-    .step1-results, .step2-results
-      cursor: pointer
-
+.total-results-first-step
+  margin-bottom: 20px
